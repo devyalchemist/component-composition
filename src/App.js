@@ -71,7 +71,8 @@ export default function App() {
 	const [watched, setWatched] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
-	const [selectedId, setSelectedId] = useState("tt1375666");
+	const [selectedId, setSelectedId] = useState("");
+	// tt1375666;
 	// const [userRating, setUserRating] = useState("");
 
 	// const tempQuery = "interstellar";
@@ -116,7 +117,8 @@ export default function App() {
 					setIsLoading(true);
 					setError("");
 					const result = await fetch(
-						`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+						`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+						{ signal: controller.signal }
 					);
 					if (!result.ok) throw new Error("Error occured while fetching data");
 					const data = await result.json();
@@ -132,6 +134,7 @@ export default function App() {
 				setIsLoading(false);
 			}
 		}
+		handleRemoveMovie();
 		fetchMovies();
 		return function () {
 			controller.abort();

@@ -14,7 +14,7 @@ function MovieDetail({
 
 	const [isLoading, setIsLoading] = useState(false);
 	const isWatched = watched?.map((movie) => movie.imdbID).includes(movieId);
-	console.log(isWatched);
+	// console.log(isWatched);
 	const watchedUserRating = watched.find(
 		(watched) => watched.imdbID === movieId
 	)?.userRating;
@@ -31,6 +31,20 @@ function MovieDetail({
 		Director: director,
 		Genre: genre,
 	} = movieDetails;
+
+	useEffect(() => {
+		function callback(e) {
+			if (e.code === "Escape") {
+				onRemoveMovie();
+				console.log("worked");
+			}
+		}
+		document.addEventListener("keydown", callback);
+
+		return function () {
+			document.removeEventListener("keydown", callback);
+		};
+	}, [onRemoveMovie]);
 	useEffect(
 		function () {
 			setMovieDetails({});
@@ -43,7 +57,7 @@ function MovieDetail({
 					);
 					if (!res.ok) throw new Error("Couldn't find movie data");
 					const data = await res.json();
-					console.log(data);
+					// console.log(data);
 					setMovieDetails(data);
 					setIsLoading(false);
 				} catch (err) {
@@ -103,7 +117,7 @@ function MovieDetail({
 							</div>
 						</div>
 						<section>
-							<div class="rating">
+							<div className="rating">
 								{!isWatched ? (
 									<>
 										<StarRating
