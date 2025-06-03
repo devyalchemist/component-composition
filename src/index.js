@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 // import StarRating from "./components/StarRating/StarRating";
 // import TestCollapse from "./components/TextCollapse/TestCollapse";
 // import "./index.css";
-import ConverterForm from "./components/Currency Converter/ConverterForm";
+// import ConverterForm from "./components/Currency Converter/ConverterForm";
 // import App from "./App";
+import App from "./components/Geolocator/Geolocator.jsx";
 /* function Test() {
 	const [movieRating, setMovieRating] = useState(0);
 	return (
@@ -20,8 +21,9 @@ import ConverterForm from "./components/Currency Converter/ConverterForm";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<React.StrictMode>
-		{/* <App /> */}
-		<ConverterForm />
+		{/* <Geolocator /> */}
+		<App />
+		{/* <ConverterForm /> */}
 		{/* <TestCollapse /> */}
 		{/* <StarRating
 			messages={["Terrible", "Bad", "Okay", "Good", "Excellent"]}

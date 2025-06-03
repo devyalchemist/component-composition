@@ -1,20 +1,16 @@
 import StarRating from "./components/StarRating/StarRating";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { KEY } from "./App";
 import Loader from "./Loader";
-function MovieDetail({
-	movieId,
-	onRemoveMovie,
-	onAddWatchedMovie,
-	watched,
-	// setUserRating,
-}) {
+import { useKey } from "./useKey";
+function MovieDetail({ movieId, onRemoveMovie, onAddWatchedMovie, watched }) {
 	const [movieDetails, setMovieDetails] = useState({});
 	const [userRating, setUserRating] = useState("");
 
 	const [isLoading, setIsLoading] = useState(false);
+
+	const countRef = useRef(0);
 	const isWatched = watched?.map((movie) => movie.imdbID).includes(movieId);
-	// console.log(isWatched);
 	const watchedUserRating = watched.find(
 		(watched) => watched.imdbID === movieId
 	)?.userRating;
@@ -31,20 +27,24 @@ function MovieDetail({
 		Director: director,
 		Genre: genre,
 	} = movieDetails;
-
 	useEffect(() => {
-		function callback(e) {
-			if (e.code === "Escape") {
-				onRemoveMovie();
-				console.log("worked");
-			}
-		}
-		document.addEventListener("keydown", callback);
+		if (userRating) countRef.current = countRef.current + 1;
+	}, [userRating]);
+	useKey("Escape", onRemoveMovie);
+	// useEffect(() => {
+	// 	function callback(e) {
+	// 		if (e.code === "Escape") {
+	// 			onRemoveMovie();
+	// 			console.log("worked");
+	// 		}
+	// 	}
+	// 	document.addEventListener("keydown", callback);
 
-		return function () {
-			document.removeEventListener("keydown", callback);
-		};
-	}, [onRemoveMovie]);
+	// 	return function () {
+	// 		document.removeEventListener("keydown", callback);
+	// 	};
+	// }, [onRemoveMovie]);
+
 	useEffect(
 		function () {
 			setMovieDetails({});
@@ -70,15 +70,12 @@ function MovieDetail({
 	);
 
 	useEffect(() => {
-		// if (!title) {
-		// 	document.title = `MOVIE`;
-		// }
-		// document.title = `MOVIE | ${title}`;
 		document.title = `MOVIE | ${!title ? "" : title}`;
 		return function () {
 			document.title = `usePopcorn`;
 		};
 	}, [title]);
+
 	function handleAdd() {
 		const newWatchedMovie = {
 			imdbID: movieId,
@@ -88,6 +85,7 @@ function MovieDetail({
 			poster,
 			userRating,
 			runtime: Number(runtime.split(" ").at(0)),
+			countRatingDecisions: countRef.current,
 		};
 		onAddWatchedMovie(newWatchedMovie);
 		onRemoveMovie();
